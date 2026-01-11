@@ -191,3 +191,92 @@ function updateHotspotsTable() {
     body.appendChild(tr);
   });
 }
+// ===== FOOD RECOMMENDATIONS DISPLAY FUNCTION =====
+function displayRecommendations(childData, status) {
+  const rec = generateRecommendations(childData, status);
+  const container = document.getElementById("recommendationsSection");
+  
+  if (!container) return;
+  
+  container.style.display = "block";
+  container.style.backgroundColor = rec.bgColor;
+  container.style.borderColor = rec.borderColor;
+  
+  let foodsHTML = rec.foods.map(f => `
+    <tr>
+      <td>${f.food}</td>
+      <td>${f.quantity || f.value}</td>
+      <td>${f.cost}</td>
+    </tr>
+  `).join('');
+  
+  const html = `
+    <div class="recommendation-header">
+      <h3 style="margin: 0 0 10px 0;">${rec.priority}</h3>
+    </div>
+    
+    <div class="recommendation-details">
+      <div class="meal-frequency">
+        <strong>📅 Recommended Meal Frequency:</strong>
+        <p>${rec.mealFrequency}</p>
+      </div>
+      
+      <div class="foods-recommended">
+        <strong>🥘 Key Foods to Include:</strong>
+        <table class="foods-table">
+          <thead>
+            <tr><th>Food</th><th>Qty</th><th>Cost</th></tr>
+          </thead>
+          <tbody>
+            ${foodsHTML}
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="supplementation-note">
+        <strong>⚕️ Additional Guidance:</strong>
+        <p>${rec.supplementation}</p>
+      </div>
+      
+      <div class="follow-up">
+        <strong>📆 Follow-up:</strong>
+        <p>Review in ${rec.followUpDays} days</p>
+      </div>
+    </div>
+  `;
+  
+  container.innerHTML = html;
+}
+
+// ===== UPDATE MEAL PLAN DISPLAY =====
+function displayMealPlan(status) {
+  const plan = generateMealPlan(status);
+  const container = document.getElementById("mealPlanSection");
+  
+  if (!container) return;
+  
+  container.style.display = "block";
+  
+  const html = `
+    <h3>📋 Sample Daily Meal Plan</h3>
+    <div class="meal-plan-items">
+      <div class="meal-item"><strong>Breakfast:</strong> ${plan.breakfast}</div>
+      <div class="meal-item"><strong>Mid-Morning:</strong> ${plan.midMorning}</div>
+      <div class="meal-item"><strong>Lunch:</strong> ${plan.lunch}</div>
+      <div class="meal-item"><strong>Afternoon Snack:</strong> ${plan.afternoon}</div>
+      <div class="meal-item"><strong>Dinner:</strong> ${plan.dinner}</div>
+    </div>
+    <p><em>💡 ${plan.notes}</em></p>
+  `;
+  
+  container.innerHTML = html;
+}
+
+// ===== UPDATE SURVEY SUBMIT HANDLER =====
+// MODIFY the existing handleSurveySubmit function:
+// Replace the surveyForm.reset() line with these additions:
+
+// AFTER updateHotspotsTable(); ADD:
+// displayRecommendations(childData, status);
+// displayMealPlan(status);
+
