@@ -204,3 +204,45 @@ th {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+/* === FOOD RECOMMENDATIONS STYLES === */
+.recommendations-section, .meal-plan-section {
+  margin: 30px auto;
+  padding: 25px;
+  background: linear-gradient(135deg, #fef3c7 0%, #fcd34d 100%);
+  border-radius: 12px;
+  border-left: 6px solid #22c55e;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  animation: slideIn 0.5s ease-in-out;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.recommendation-header {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid rgba(0,0,0,0.1);
+}
+
+.recommendation-header h3 {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.recommendation-details {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.meal-frequency, .foods-recommended, .supplementation-note, .follow-up {
+  padding: 15px;
+  background: rgba(255,255,255,0.9);
+  border-radius: 8px;
+  border-left: 4px solid #3b82f6;
+}
+
+.foods-table
+
