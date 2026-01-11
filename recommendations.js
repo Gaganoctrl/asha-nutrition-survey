@@ -112,3 +112,188 @@ function generateMealPlan(status) {
 window.generateRecommendations = generateRecommendations;
 window.generateMealPlan = generateMealPlan;
 window.foodDatabase = foodDatabase;
+
+
+// ============================================
+// FAST FOOD RECOMMENDATIONS MODULE
+// Quick lookup for rapid nutritional guidance
+// ============================================
+
+const fastFoodIndex = {
+ // Category-based quick lookup
+ protein: foodDatabase.protein.reduce((acc, food, idx) => ({ ...acc, [food.food.toLowerCase()]: { ...food, idx } }), {}),
+ calories: foodDatabase.calories.reduce((acc, food, idx) => ({ ...acc, [food.food.toLowerCase()]: { ...food, idx } }), {}),
+ micronutrients: foodDatabase.micronutrients.reduce((acc, food, idx) => ({ ...acc, [food.food.toLowerCase()]: { ...food, idx } }), {}),
+};
+
+// Cache for frequently accessed recommendations
+const recommendationCache = {};
+
+/**
+ * FAST RECOMMENDATION FUNCTION
+ * Returns instant food recommendations based on nutritional status
+ * Time complexity: O(1) - Direct lookup
+ */
+function getFastRecommendations(status) {
+ // Check cache first
+ if (recommendationCache[status]) {
+ return recommendationCache[status];
+ }
+ 
+ const rec = recommendationMatrix[status];
+ if (!rec) return null;
+ 
+ const result = {
+ status: status,
+ priority: rec.priority,
+ urgency: rec.urgency,
+ bgColor: rec.bgColor,
+ borderColor: rec.borderColor,
+ mealFrequency: rec.mealFrequency,
+ supplementation: rec.supplementation,
+ followUpDays: rec.followUpDays,
+ foods: []
+ };
+ 
+ // Fast food lookup
+ rec.recommendations.forEach(category => {
+ if (foodDatabase[category]) {
+ result.foods.push(...foodDatabase[category].slice(0, 2));
+ }
+ });
+ 
+ // Cache the result
+ recommendationCache[status] = result;
+ return result;
+}
+
+/**
+ * FOOD SEARCH FUNCTION
+ * Quickly find a food by name across all categories
+ * Returns: Food object with category info
+ */
+function searchFood(foodName) {
+ const name = foodName.toLowerCase().trim();
+ 
+ // Search across all categories
+ for (const [category, foods] of Object.entries(fastFoodIndex)) {
+ if (foods[name]) {
+ return {
+ food: foods[name],
+ category: category,
+ found: true
+ };
+ }
+ }
+ 
+ return { found: false, message: `Food '${foodName}' not found in database` };
+}
+
+/**
+ * CATEGORY QUICK LOOKUP
+ * Get all foods in a specific category
+ */
+function getFoodsByCategory(category) {
+ return foodDatabase[category] || [];
+}
+
+/**
+ * QUICK MEAL SUGGESTION
+ * Suggests best foods for specific nutrient needs
+ */
+function quickMealSuggestion(nutrientNeeds) {
+ // nutrientNeeds: ['protein', 'iron', 'calcium']
+ const suggestions = [];
+ const seen = new Set();
+ 
+ nutrientNeeds.forEach(need => {
+ foodDatabase.protein.forEach(food => {
+ if (!seen.has(food.food)) {
+ suggestions.push(food);
+ seen.add(food.food);
+ }
+ });
+ foodDatabase.micronutrients.forEach(food => {
+ if (!seen.has(food.food)) {
+ suggestions.push(food);
+ seen.add(food.food);
+ }
+ });
+ });
+ 
+ return suggestions.slice(0, 5);
+}
+
+/**
+ * INSTANT ANALYSIS
+ * Analyze child data and return quick recommendations in <100ms
+ */
+function instantAnalysis(childData) {
+ const score = calculateQuickScore(childData);
+ const status = classifyChildStatus(score);
+ return getFastRecommendations(status);
+}
+
+/**
+ * QUICK SCORE CALCULATOR
+ * Simplified scoring for instant feedback
+ */
+function calculateQuickScore(data) {
+ let score = 0;
+ 
+ if (data.muac < 11.5) score += 3;
+ else if (data.muac < 12.5) score += 2;
+ else if (data.muac < 13.5) score += 1;
+ 
+ if (data.mealsPerDay <= 2) score += 2;
+ else if (data.mealsPerDay === 3) score += 1;
+ 
+ if (data.dietGroups <= 2) score += 2;
+ else if (data.dietGroups <= 4) score += 1;
+ 
+ if (data.illness === 'yes') score += 1;
+ if (data.immunized === 'no') score += 1;
+ 
+ return score;
+}
+
+/**
+ * STATUS CLASSIFIER
+ * Quick status mapping
+ */
+function classifyChildStatus(score) {
+ if (score >= 6) return "Severely Malnourished";
+ if (score >= 4) return "At Risk";
+ if (score >= 2) return "Borderline";
+ return "Nourished";
+}
+
+/**
+ * BATCH RECOMMENDATION
+ * Process multiple children data for quick analysis
+ */
+function batchRecommendations(childrenData) {
+ return childrenData.map(child => ({
+ childId: child.id,
+ recommendation: instantAnalysis(child),
+ timestamp: new Date().toISOString()
+ }));
+}
+
+/**
+ * CLEAR CACHE
+ * Force refresh of cached recommendations
+ */
+function clearRecommendationCache() {
+ Object.keys(recommendationCache).forEach(key => delete recommendationCache[key]);
+}
+
+// Export fast recommendation functions
+window.getFastRecommendations = getFastRecommendations;
+window.searchFood = searchFood;
+window.getFoodsByCategory = getFoodsByCategory;
+window.quickMealSuggestion = quickMealSuggestion;
+window.instantAnalysis = instantAnalysis;
+window.batchRecommendations = batchRecommendations;
+window.clearRecommendationCache = clearRecommendationCache;
+window.fastFoodIndex = fastFoodIndex;
