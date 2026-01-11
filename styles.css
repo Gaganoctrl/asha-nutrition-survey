@@ -246,3 +246,53 @@ th {
 
 .foods-table
 
+
+
+/* Meal plan styles */
+.meal-plan-section {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  border-left-color: #3b82f6;
+  margin: 30px auto;
+}
+
+.meal-plan-items {
+  display: grid;
+  gap: 15px;
+  margin: 15px 0;
+}
+
+.meal-item {
+  padding: 12px 15px;
+  background: rgba(255,255,255,0.95);
+  border-radius: 8px;
+  border-left: 4px solid #06b6d4;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.foods-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0;
+  font-size: 0.9rem;
+}
+
+.foods-table thead {
+  background: #f0f9ff;
+}
+
+.foods-table th, .foods-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+}
+
+.foods-table tbody tr:hover {
+  background: #f9fafb;
+}
+
+/* Status-based recommendation colors */
+.recommendation-details [style*="#fee2e2"] { background: #fee2e2 !important; border-left-color: #dc2626 !important; }
+.recommendation-details [style*="#fef08a"] { background: #fef08a !important; border-left-color: #f59e0b !important; }
+.recommendation-details [style*="#fed7aa"] { background: #fed7aa !important; border-left-color: #f97316 !important; }
+.recommendation-details [style*="#dcfce7"] { background: #dcfce7 !important; border-left-color: #22c55e !important; }
