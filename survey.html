@@ -136,6 +136,33 @@
 
   <script src="app.js"></script><!-- Add this script tag AFTER app.js -->
 <script src="recommendations.js"></script>
+  
+<!-- Quick Food Recommendations API -->
+<script>
+// Quick reference for instant food recommendations
+window.quickFoodAPI = {
+  // Get instant recommendation for a status
+  getRecommendation: (status) => getFastRecommendations(status),
+  
+  // Search food by name
+  findFood: (name) => searchFood(name),
+  
+  // Get foods by category (protein, calories, micronutrients)
+  getCategory: (category) => getFoodsByCategory(category),
+  
+  // Get quick meal suggestion based on needs
+  suggestMeal: (needs) => quickMealSuggestion(needs),
+  
+  // Instant analysis from child data
+  analyze: (childData) => instantAnalysis(childData),
+  
+  // Batch process multiple children
+  processBatch: (childrenArray) => batchRecommendations(childrenArray)
+};
+
+// Bind to window for global access
+window.quickFood = window.quickFoodAPI;
+</script>
 
   
 </body>
