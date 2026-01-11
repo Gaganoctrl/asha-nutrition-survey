@@ -35,7 +35,8 @@ const surveyForm = document.getElementById("surveyForm");
 if (surveyForm) {
   surveyForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    handleSurveySubmit();
+    40
+      ();
   });
 
   initChart();
@@ -61,6 +62,11 @@ function handleSurveySubmit() {
   surveyData.push({ ward, status });
   updateWardChart();
   updateHotspotsTable();
+   
+ // Display food recommendations and meal plan
+ const childData = { ageMonths, weight, height, muac, illness, immunized, mealsPerDay, dietGroups };
+ displayRecommendations(childData, status);
+ displayMealPlan(status);
 
   surveyForm.reset();
 }
